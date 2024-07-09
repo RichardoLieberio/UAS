@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ShopProducts from './ShopProducts'
 
 function Shop({ addToCart }) {
-    const shops = useSelector((state) => state.product.shops);
+    const shops = useSelector((state) => state.shop.shops);
 
     return(
         <>

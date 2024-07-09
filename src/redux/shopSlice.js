@@ -16,8 +16,8 @@ function sortItems(items) {
   return shops;
 }
 
-export const productSlice = createSlice({
-  name: 'product',
+export const shopSlice = createSlice({
+  name: 'shop',
   initialState: {
     items: products,
     shops: sortItems(products),
@@ -25,16 +25,19 @@ export const productSlice = createSlice({
   },
   reducers: {
     addToCart(state, action) {
-      if (state.cart[action.payload.id]) {
-        state.cart[action.payload.id].count += 1;
+      const product = action.payload;
+      if (state.cart[product.shop.id] && state.cart[product.shop.id].items[product.id]) {
+        state.cart[product.shop.id].items[product.id].count += 1;
+      } else if (state.cart[product.shop.id]) {
+        state.cart[product.shop.id].items[product.id] = {... product, count: 1};
       } else {
-        state.cart[action.payload.id] = {... action.payload, count: 1};
+        state.cart[product.shop.id] = {name: product.shop.name, items: {[product.id]: {... product, count: 1}}};
       }
       state.cart.total += 1;
     }
   },
 })
 
-export const { addToCart } = productSlice.actions
+export const { addToCart } = shopSlice.actions
 
-export default productSlice.reducer
+export default shopSlice.reducer

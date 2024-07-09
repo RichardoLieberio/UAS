@@ -1,17 +1,17 @@
-import './App.css'
 import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useSelector } from 'react-redux'
+import './App.css'
 import AddedFlush from './components/AddedFlush'
 import Navbar from './components/Navbar'
 import Shop from './components/Shop'
 import Cart from './components/Cart'
 
 function App() {
-  const [showAddedFlush, setShowAddedFlush] = useState(false);
-  const [cartLength, setCartLength] = useState(0);
+  const cart = useSelector((state) => state.shop.cart);
 
-  const cart = useSelector((state) => state.product.cart);
+  const [showAddedFlush, setShowAddedFlush] = useState(false);
+  const [cartLength, setCartLength] = useState(cart.total);
 
   useEffect(function() {
     const timerId = setTimeout(function() {
@@ -23,7 +23,7 @@ function App() {
 
   useEffect(function() {
     setCartLength(cart.total);
-  }, [cart])
+  }, [cart]);
 
   function addedFlushHandler() {
     setShowAddedFlush(true);

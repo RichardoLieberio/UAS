@@ -1,7 +1,6 @@
-// {id, title, price, image, shopName, discount}
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { addToCart } from '../redux/productSlice';
+import { addToCart } from '../redux/shopSlice';
 
 function ProductCard({ product, clickHandler }) {
     const dispatch = useDispatch();

@@ -17,7 +17,7 @@ function ShopProducts({ shop, addToCart }) {
 
     return(
         <div className="my-8">
-            <div className="w-[1280px] mx-auto">
+            <div className="w-[1140px] mx-auto">
                 <h2 className="text-gray-900 font-semibold text-xl tracking-tight dark:text-white mb-4">{shop.name}</h2>
                 <Slider {...settings}>
                     {shop.items.map(product => <ProductCard key={product.id} product={product} clickHandler={addToCart}/>)}
