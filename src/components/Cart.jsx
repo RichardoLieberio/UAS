@@ -55,7 +55,7 @@ function Cart({ cart, methods }) {
                     if (itemId != "name" && cart[shopId].items[itemId].selected) {
                         totalItems += cart[shopId].items[itemId].count;
                         totalPrice[0] += cart[shopId].items[itemId].count * (cart[shopId].items[itemId].price * (100 - cart[shopId].items[itemId].discount_percentage) / 100).toFixed(2);
-                        totalPrice[1] += (cart[shopId].items[itemId].count * cart[shopId].items[itemId].price);
+                        totalPrice[1] += cart[shopId].items[itemId].count * cart[shopId].items[itemId].price;
                     }
                 });
             }
