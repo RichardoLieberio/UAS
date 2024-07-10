@@ -24,6 +24,7 @@ function CartItem({ shopId, shopName, items, methods }) {
                         <input onChange={selectAll} checked={checkAllItemSelected()} type="checkbox" className="checkbox checkbox-info mr-4" />
                         <h2 className="card-title">{shopName}</h2>
                     </span>
+                    <button onClick={() => {methods.deleteShopItems(shopId)}} className="text-blue-600 w-fit h-fit bg-transparent">Delete Shop</button>
                 </div>
             </div>
             {Object.keys(items).map(itemId => <CartProduct key={itemId} item={items[itemId]} methods={methods} />)}

@@ -9,7 +9,7 @@ import Cart from './components/Cart'
 
 function App() {
   const [showAddedFlush, setShowAddedFlush] = useState(false);
-  const [showRemovedFlush, setShowRemovedFlush] = useState(false);
+  const [showRemovedFlush, setShowRemovedFlush] = useState("");
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")) || {total: 0});
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function App() {
 
   useEffect(function() {
     const timerId = setTimeout(function() {
-      setShowRemovedFlush(false)
+      setShowRemovedFlush("")
     }, 3000);
 
     return () => clearTimeout(timerId)
@@ -122,23 +122,23 @@ function App() {
       }, {});
       setCart({...cart, total: cart.total - product.count, [product.shop.id]: {...cart[product.shop.id], items: {...newCart}}});
     }
-    setShowRemovedFlush(true);
+    setShowRemovedFlush("Items removed from cart!");
   }
 
-  function deleteSelected() {
-    let object = {};
-    Object.keys(cart).forEach(shopId => {
-      if (shopId != "total") {
-        const shopItems = Object.keys(cart[shopId].items).filter(itemId => !cart[shopId].items[itemId].selected).reduce((object, key) => {
-          object[key] = cart[shopId].items[key];
-          return object;
-        }, {});
-        if (Object.keys(shopItems).length) {
-          object[shopId] = {...cart[shopId], items: {...shopItems}};
-        }
-      }
-    });
-    setCart({...object, total: recount(object)});
+  function deleteShopItems(id) {
+    const newObject = Object.keys(cart).filter(shopId => shopId != id).reduce((object, key) => {
+      object[key] = cart[key];
+      return object;
+    }, {});
+    setCart({...newObject, total: recount(newObject)});
+    setShowRemovedFlush("Shop removed from cart!");
+  }
+
+  function deleteAll() {
+    if (Object.keys(cart).length != 1) {
+      setCart({total: 0});
+      setShowRemovedFlush("All items removed from cart!");
+    }
   }
 
   function recount(cart) {
@@ -164,13 +164,14 @@ function App() {
     shopSelectAll,
     shopDeselectAll,
     selectAll,
-    deleteSelected
+    deleteAll,
+    deleteShopItems,
   }
 
   return (
     <BrowserRouter>
       <AddedFlush enable={showAddedFlush ? "opacity-100 top-20 z-[2]" : "opacity-0 z-0 top-0"} />
-      <RemovedFlush enable={showRemovedFlush ? "opacity-100 top-20 z-[2]" : "opacity-0 z-0 top-0"} />
+      <RemovedFlush enable={showRemovedFlush ? "opacity-100 top-20 z-[2]" : "opacity-0 z-0 top-0"} message={showRemovedFlush} />
       <Navbar cartLength={cart.total} />
       <div className="mt-20">
         <Routes>

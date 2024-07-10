@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-function RemoveFlush({ enable }) {
+function RemoveFlush({ enable, message }) {
     return(
         <div role="alert" className={"alert alert-error w-3/4 fixed left-1/2 -translate-x-1/2 transition-all " + enable}>
             <svg
@@ -14,13 +14,14 @@ function RemoveFlush({ enable }) {
                     strokeWidth="2"
                     d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>Item removed from cart!</span>
+            <span>{message}</span>
         </div>
     )
 }
 
 RemoveFlush.propTypes = {
     enable: PropTypes.string,
+    message: PropTypes.string,
 }
 
 export default RemoveFlush

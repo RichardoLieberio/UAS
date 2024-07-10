@@ -32,20 +32,6 @@ function Cart({ cart, methods }) {
         return allSelected;
     }
 
-    function checkIfItemSelected() {
-        let selected = false;
-        Object.keys(cart).forEach(shopId => {
-            if (shopId != "total") {
-                Object.keys(cart[shopId].items).forEach(itemId => {
-                    if (cart[shopId].items[itemId].selected) {
-                        selected = true;
-                    }
-                });
-            }
-        });
-        return selected;
-    }
-
     function checkout() {
         let totalItems = 0;
         let totalPrice = [0, 0];
@@ -76,7 +62,7 @@ function Cart({ cart, methods }) {
                                         <input type="checkbox" checked={checkAllItemSelected()} onChange={methods.selectAll} className="checkbox checkbox-info mr-4" />
                                         <h2 className="card-title">Select all <span className="text-gray-500 text-base">({countTotalItems(cart)})</span></h2>
                                     </span>
-                                    {checkIfItemSelected() ? <button onClick={methods.deleteSelected} className="text-blue-600 w-fit h-fit bg-transparent">Delete</button> : ""}
+                                    <button onClick={methods.deleteAll} className="text-blue-600 w-fit h-fit bg-transparent">Delete All</button>
                                 </div>
                             </div>
                         </div>
