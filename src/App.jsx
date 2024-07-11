@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import AddedFlush from './components/AddedFlush'
 import RemovedFlush from './components/RemovedFlush'
@@ -25,112 +25,138 @@ function App() {
 
   useEffect(function() {
     const timerId = setTimeout(function() {
-      setShowAddedFlush(false)
+      setShowAddedFlush(false);
     }, 3000);
 
-    return () => clearTimeout(timerId)
+    return () => clearTimeout(timerId);
   }, [showAddedFlush]);
 
   useEffect(function() {
     const timerId = setTimeout(function() {
-      setShowRemovedFlush("")
+      setShowRemovedFlush("");
     }, 3000);
 
-    return () => clearTimeout(timerId)
+    return () => clearTimeout(timerId);
   }, [showRemovedFlush]);
 
   function addToCart(product) {
+    const newCart = {...cart};
+    newCart.total += 1;
     if (cart[product.shop.id] && cart[product.shop.id].items[product.id]) {
-      setCart({...cart, total: cart.total + 1, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...cart[product.shop.id].items[product.id], count: cart[product.shop.id].items[product.id].count += 1}}}});
+      newCart[product.shop.id].items[product.id].count += 1;
+      setCart(newCart);
     } else if (cart[product.shop.id]) {
-      setCart({...cart, total: cart.total + 1, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...product, note: "", like: false, count: 1, selected: false}}}});
+      newCart[product.shop.id].items[product.id] = {...product, note: "", like: false, count: 1, selected: false};
+      setCart(newCart);
     } else {
-      setCart({...cart, total: cart.total + 1, [product.shop.id]: {name: product.shop.name, items: {[product.id]: {...product, note: "", like: false, count: 1, selected: false}}}});
+      newCart[product.shop.id] = {
+        name: product.shop.name,
+        items: {[product.id]: {...product, note: "", like: false, count: 1, selected: false}}
+      };
+      setCart(newCart);
     }
     setShowAddedFlush(true);
   }
 
   function minusCount(product) {
-    setCart({...cart, total: cart[product.shop.id].items[product.id].count > 1 ? cart.total - 1 : cart.total, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...product, count: cart[product.shop.id].items[product.id].count > 1 ? cart[product.shop.id].items[product.id].count - 1 : 1}}}});
+    if (cart[product.shop.id].items[product.id].count > 1) {
+      const newCart = {...cart};
+      cart[product.shop.id].items[product.id].count -= 1;
+      newCart.total -= 1;
+      setCart(newCart);
+    }
   }
 
   function addCount(product) {
-    setCart({...cart, total: cart.total + 1, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...product, count: cart[product.shop.id].items[product.id].count += 1}}}});
+    const newCart = {...cart};
+    newCart[product.shop.id].items[product.id].count += 1;
+    newCart.total += 1;
+    setCart(newCart);
   }
 
   function changeCount(e, product) {
-    const itemCount = cart[product.shop.id].items[product.id].count;
-    const newItemCount = parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 1;
-    setCart({...cart, total: cart.total - itemCount + newItemCount, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...product, count: newItemCount}}}});
+    if (parseInt(e.target.value) > 0) {
+      const newCart = {...cart};
+      newCart[product.shop.id].items[product.id].count = parseInt(e.target.value);
+      newCart.total = recount(newCart);
+      setCart(newCart);
+    }
   }
 
   function saveNote(note, product) {
-    setCart({...cart, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...product, note: note}}}});
+    const newCart = {...cart};
+    newCart[product.shop.id].items[product.id].note = note;
+    setCart(newCart);
   }
 
   function toggleLike(product) {
-    setCart({...cart, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...product, like: !product.like}}}});
+    const newCart = {...cart};
+    newCart[product.shop.id].items[product.id].like = !product.like;
+    setCart(newCart);
   }
 
   function toggleSelected(product) {
-    setCart({...cart, [product.shop.id]: {...cart[product.shop.id], items: {...cart[product.shop.id].items, [product.id]: {...product, selected: !product.selected}}}});
+    const newCart = {...cart};
+    newCart[product.shop.id].items[product.id].selected = !product.selected;
+    setCart(newCart);
   }
 
   function shopSelectAll(shopId) {
-    let object = {}
-    Object.keys(cart[shopId].items).map(itemId => {
-      object[itemId] = {...cart[shopId].items[itemId], selected: true};
-    });
-    setCart({...cart, [shopId]: {...cart[shopId], items: {...object}}});
+    const newCart = {...cart};
+    for (let productId in newCart[shopId].items) {
+      newCart[shopId].items[productId].selected = true;
+    }
+    setCart(newCart);
   }
 
   function shopDeselectAll(shopId) {
-    let object = {}
-    Object.keys(cart[shopId].items).map(itemId => {
-      object[itemId] = {...cart[shopId].items[itemId], selected: false};
-    });
-    setCart({...cart, [shopId]: {...cart[shopId], items: {...object}}});
+    const newCart = {...cart};
+    for (let productId in newCart[shopId].items) {
+      newCart[shopId].items[productId].selected = false;
+    }
+    setCart(newCart);
   }
 
   function selectAll(e) {
-    let object = {...cart};
-    Object.keys(cart).forEach(shopId => {
+    const newCart = {...cart};
+    for (let shopId in newCart) {
       if (shopId != "total") {
-        Object.keys(cart[shopId].items).forEach(itemId => {
-          object[shopId].items[itemId] = {...object[shopId].items[itemId], selected: e.target.checked};
-        });
+        for (let productId in newCart[shopId].items) {
+          newCart[shopId].items[productId].selected = e.target.checked;
+        }
       }
-    });
-    setCart({...object});
+    }
+    setCart(newCart);
   }
 
   function removeItem(product) {
-    if (Object.keys(cart[product.shop.id].items).length == 1) {
-      const newCart = Object.keys(cart).filter(cartId => cartId != product.shop.id).reduce((object, key) => {
-        if (key == "total") {
-          object[key] = cart[key] - product.count;
-        } else {
-          object[key] = cart[key];
-        }
+    if (Object.keys(cart[product.shop.id].items).length <= 1) {
+      const newCart = Object.keys(cart).filter(shopId => shopId != product.shop.id).reduce((object, shopId) => {
+        object[shopId] = cart[shopId];
         return object;
       }, {});
-      setCart({...newCart});
+      newCart.total = recount(newCart);
+      setCart(newCart);
     } else {
-      const newCart = Object.keys(cart[product.shop.id].items).filter(itemId => itemId != product.id).reduce((object, key) => {
-        object[key] = cart[product.shop.id].items[key];
+      const newItems = Object.keys(cart[product.shop.id].items).filter(productId => productId != product.id).reduce((object, productId) => {
+        object[productId] = cart[product.shop.id].items[productId];
         return object;
       }, {});
-      setCart({...cart, total: cart.total - product.count, [product.shop.id]: {...cart[product.shop.id], items: {...newCart}}});
+      const newCart = {...cart};
+      newCart[product.shop.id].items = newItems;
+      newCart.total = recount(newCart);
+      setCart(newCart);
     }
     setShowRemovedFlush("Items removed from cart!");
   }
 
   function deleteShopItems(id) {
-    const newObject = Object.keys(cart).filter(shopId => shopId != id).reduce((object, key) => {
-      object[key] = cart[key];
+    const newCart = Object.keys(cart).filter(shopId => shopId != id).reduce((object, shopId) => {
+      object[shopId] = cart[shopId];
       return object;
     }, {});
-    setCart({...newObject, total: recount(newObject)});
+    newCart.total = recount(newCart);
+    setCart(newCart);
     setShowRemovedFlush("Shop removed from cart!");
   }
 
@@ -143,13 +169,13 @@ function App() {
 
   function recount(cart) {
     let total = 0;
-    Object.keys(cart).forEach(shopId => {
+    for (let shopId in cart) {
       if (shopId != "total") {
-        Object.keys(cart[shopId].items).forEach(itemId => {
-          total += cart[shopId].items[itemId].count;
-        });
+        for (let productId in cart[shopId].items) {
+          total += cart[shopId].items[productId].count;
+        }
       }
-    });
+    }
     return total;
   }
 
@@ -166,7 +192,7 @@ function App() {
     selectAll,
     deleteAll,
     deleteShopItems,
-  }
+  };
 
   return (
     <BrowserRouter>

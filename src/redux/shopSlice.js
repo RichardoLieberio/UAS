@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import products from './product.json'
 
 function sortItems(items) {
-  let shops = {};
+  const shops = {};
   items.forEach(item => {
     if (shops[item.shop.id]) {
       shops[item.shop.id].items.push(item);

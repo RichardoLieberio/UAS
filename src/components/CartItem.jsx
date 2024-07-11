@@ -7,13 +7,12 @@ function CartItem({ shopId, shopName, items, methods }) {
     }
 
     function checkAllItemSelected() {
-        let allSelected = true;
-        Object.keys(items).forEach(itemId => {
-            if (items[itemId].selected == false) {
-                allSelected = false;
+        for (let productId in items) {
+            if (items[productId].selected == false) {
+                return false;
             }
-        });
-        return allSelected;
+        }
+        return true;
     }
 
     return(
@@ -24,7 +23,7 @@ function CartItem({ shopId, shopName, items, methods }) {
                         <input onChange={selectAll} checked={checkAllItemSelected()} type="checkbox" className="checkbox checkbox-info mr-4" />
                         <h2 className="card-title">{shopName}</h2>
                     </span>
-                    <button onClick={() => {methods.deleteShopItems(shopId)}} className="text-blue-600 w-fit h-fit bg-transparent">Delete Shop</button>
+                    <button onClick={() => {methods.deleteShopItems(shopId)}} className="text-blue-600 w-fit h-fit bg-transparent">Delete Items</button>
                 </div>
             </div>
             {Object.keys(items).map(itemId => <CartProduct key={itemId} item={items[itemId]} methods={methods} />)}

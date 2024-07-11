@@ -1,9 +1,9 @@
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import PropTypes from 'prop-types'
 import Slider from 'react-slick'
-import ProductCard from './ProductCard'
+import PropTypes from 'prop-types'
 import { SamplePrevArrow, SampleNextArrow } from './SampleArrows'
+import ProductCard from './ProductCard'
 
 function ShopProducts({ shop, addToCart }) {
     const settings = {
@@ -12,7 +12,7 @@ function ShopProducts({ shop, addToCart }) {
         slidesToShow: 5,
         slidesToScroll: 5,
         prevArrow: <SamplePrevArrow />,
-        nextArrow: <SampleNextArrow />
+        nextArrow: <SampleNextArrow />,
     };
 
     return(
@@ -20,7 +20,7 @@ function ShopProducts({ shop, addToCart }) {
             <div className="w-[1140px] mx-auto">
                 <h2 className="text-gray-900 font-semibold text-xl tracking-tight dark:text-white mb-4">{shop.name}</h2>
                 <Slider {...settings}>
-                    {shop.items.map(product => <ProductCard key={product.id} product={product} clickHandler={addToCart}/>)}
+                    {shop.items.map(product => <ProductCard key={product.id} product={product} addToCart={addToCart}/>)}
                 </Slider>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-function ProductCard({ product, clickHandler }) {
+function ProductCard({ product, addToCart }) {
     return(
         <div className="w-52 mx-auto hover:brightness-95">
             <div className="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700">
@@ -15,7 +15,7 @@ function ProductCard({ product, clickHandler }) {
                         </div>
                     </div>
                     <div className="flex items-center justify-end mt-1">
-                        <button onClick={() => {clickHandler(product)}} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</button>
+                        <button onClick={() => {addToCart(product)}} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</button>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@ function ProductCard({ product, clickHandler }) {
 
 ProductCard.propTypes = {
     product: PropTypes.object,
-    clickHandler: PropTypes.func,
+    addToCart: PropTypes.func,
 }
 
 export default ProductCard

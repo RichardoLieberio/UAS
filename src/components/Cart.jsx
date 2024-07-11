@@ -3,50 +3,53 @@ import CartItem from './CartItem'
 import Checkout from './Checkout'
 
 function Cart({ cart, methods }) {
-    function countTotalItems(cart) {
+    function checkIsAllItemSelected() {
+        if (Object.keys(cart).length != 1) {
+            for (let shopId in cart) {
+                if (shopId != "total") {
+                    for (let productId in cart[shopId].items) {
+                        if (!cart[shopId].items[productId].selected) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function countTotalItems() {
         let total = 0;
-        Object.keys(cart).forEach(shopId => {
+        for (let shopId in cart) {
             if (shopId != "total") {
                 Object.keys(cart[shopId].items).forEach(() => {
                     total += 1;
                 });
             }
-        });
-        return total;
-    }
-
-    function checkAllItemSelected() {
-        let allSelected = true;
-        if (Object.keys(cart).length == 1) {
-            return false;
         }
-        Object.keys(cart).forEach(shopId => {
-            if (shopId != "total") {
-                Object.keys(cart[shopId].items).forEach(itemId => {
-                    if (!cart[shopId].items[itemId].selected) {
-                        allSelected = false;
-                    }
-                });
-            }
-        });
-        return allSelected;
+        return total;
     }
 
     function checkout() {
         let totalItems = 0;
-        let totalPrice = [0, 0];
-        Object.keys(cart).forEach(shopId => {
+        const prices = {
+            before: 0,
+            discount: 0
+        };
+        for (let shopId in cart) {
             if (shopId != "total") {
-                Object.keys(cart[shopId].items).forEach(itemId => {
-                    if (itemId != "name" && cart[shopId].items[itemId].selected) {
-                        totalItems += cart[shopId].items[itemId].count;
-                        totalPrice[0] += cart[shopId].items[itemId].count * (cart[shopId].items[itemId].price * (100 - cart[shopId].items[itemId].discount_percentage) / 100).toFixed(2);
-                        totalPrice[1] += cart[shopId].items[itemId].count * cart[shopId].items[itemId].price;
+                for (let productId in cart[shopId].items) {
+                    if (cart[shopId].items[productId].selected) {
+                        totalItems += cart[shopId].items[productId].count;
+                        prices.before += cart[shopId].items[productId].count * cart[shopId].items[productId].price;
+                        prices.discount += cart[shopId].items[productId].count * (cart[shopId].items[productId].price * (100 - cart[shopId].items[productId].discount_percentage) / 100).toFixed(2);
                     }
-                });
+                }
             }
-        });
-        return {totalItems: totalItems, totalPrice: [totalPrice[0].toFixed(2), totalPrice[1].toFixed(2)]};
+        }
+        return {totalItems: totalItems, prices};
     }
 
     return(
@@ -59,14 +62,14 @@ function Cart({ cart, methods }) {
                             <div className="card-body p-0">
                                 <div className="flex items-center justify-between h-12">
                                     <span className="flex items-center">
-                                        <input type="checkbox" checked={checkAllItemSelected()} onChange={methods.selectAll} className="checkbox checkbox-info mr-4" />
-                                        <h2 className="card-title">Select all <span className="text-gray-500 text-base">({countTotalItems(cart)})</span></h2>
+                                        <input type="checkbox" checked={checkIsAllItemSelected()} onChange={methods.selectAll} className="checkbox checkbox-info mr-4" />
+                                        <h2 className="card-title">Select all <span className="text-gray-500 text-base">({countTotalItems()})</span></h2>
                                     </span>
                                     <button onClick={methods.deleteAll} className="text-blue-600 w-fit h-fit bg-transparent">Delete All</button>
                                 </div>
                             </div>
                         </div>
-                        {Object.keys(cart).map(shopId => shopId != "total" ? <CartItem key={shopId} shopId={shopId} shopName={cart[shopId].name} items={cart[shopId].items} methods={methods} /> : "")}
+                        {Object.keys(cart).map(shopId => shopId != "total" && <CartItem key={shopId} shopId={shopId} shopName={cart[shopId].name} items={cart[shopId].items} methods={methods} />)}
                     </div>
                     <Checkout checkout={checkout()} />
                 </div>
