@@ -29,7 +29,7 @@ function ShopProducts({ shopId, shop, addToCart }) {
 }
 
 ShopProducts.propTypes = {
-    shopId: PropTypes.number,
+    shopId: PropTypes.string,
     shop: PropTypes.object,
     addToCart: PropTypes.func,
 }

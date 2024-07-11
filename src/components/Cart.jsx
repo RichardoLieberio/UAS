@@ -57,7 +57,7 @@ function Cart({ cart, methods }) {
             <div className="w-[1140px] mx-auto">
                 <h2 className="text-gray-900 font-semibold text-xl tracking-tight dark:text-white mb-4">Cart</h2>
                 <div className="flex w-full flex-col lg:flex-row gap-8">
-                    <div className="rounded-box grid flex-grow place-items-center w-1/2 p-0">
+                    <div className="rounded-box grid flex-grow place-items-center w-1/2 h-fit p-0">
                         <div className="bg-white w-full shadow-md py-4 px-8 rounded-lg dark:bg-gray-800 dark:border-gray-700">
                             <div className="card-body p-0">
                                 <div className="flex items-center justify-between h-12">
