@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import CartItem from './CartItem'
 import Checkout from './Checkout'
+import { IoMdArrowRoundBack } from 'react-icons/io'
 
 function Cart({ cart, methods }) {
     function checkIsAllItemSelected() {
@@ -55,7 +57,10 @@ function Cart({ cart, methods }) {
     return(
         <div className="my-8">
             <div className="w-[1140px] mx-auto">
-                <h2 className="text-gray-900 font-semibold text-xl tracking-tight dark:text-white mb-4">Cart</h2>
+                <span className="flex items-center mb-4">
+                    <Link to="/" className="text-2xl mr-2"><IoMdArrowRoundBack /></Link>
+                    <h2 className="text-gray-900 font-semibold text-xl tracking-tight dark:text-white">Cart</h2>
+                </span>
                 <div className="flex w-full flex-col lg:flex-row gap-8">
                     <div className="rounded-box grid flex-grow place-items-center w-1/2 h-fit p-0">
                         <div className="bg-white w-full shadow-md py-4 px-8 rounded-lg dark:bg-gray-800 dark:border-gray-700">
