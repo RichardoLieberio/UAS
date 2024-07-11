@@ -2,10 +2,11 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Slider from 'react-slick'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { SamplePrevArrow, SampleNextArrow } from './SampleArrows'
 import ProductCard from './ProductCard'
 
-function ShopProducts({ shop, addToCart }) {
+function ShopProducts({ shopId, shop, addToCart }) {
     const settings = {
         speed: 600,
         infinite: false,
@@ -18,8 +19,8 @@ function ShopProducts({ shop, addToCart }) {
     return(
         <div className="my-8">
             <div className="w-[1140px] mx-auto">
-                <h2 className="text-gray-900 font-semibold text-xl tracking-tight dark:text-white mb-4">{shop.name}</h2>
-                <Slider {...settings}>
+                <Link to={"/shop/" + shopId} className="text-gray-900 font-semibold text-xl tracking-tight dark:text-white">{shop.name}</Link>
+                <Slider {...settings} className="mt-4">
                     {shop.items.map(product => <ProductCard key={product.id} product={product} addToCart={addToCart}/>)}
                 </Slider>
             </div>
@@ -28,6 +29,7 @@ function ShopProducts({ shop, addToCart }) {
 }
 
 ShopProducts.propTypes = {
+    shopId: PropTypes.number,
     shop: PropTypes.object,
     addToCart: PropTypes.func,
 }

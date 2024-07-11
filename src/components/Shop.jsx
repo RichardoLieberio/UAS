@@ -7,7 +7,7 @@ function Shop({ addToCart }) {
 
     return(
         <>
-            {Object.keys(shops).map(shopId => <ShopProducts key={shopId} shop={shops[shopId]} addToCart={addToCart} />)}
+            {Object.keys(shops).map(shopId => <ShopProducts key={shopId} shopId={shopId} shop={shops[shopId]} addToCart={addToCart} />)}
         </>
     )
 }

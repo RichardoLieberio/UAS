@@ -6,6 +6,7 @@ import RemovedFlush from './components/RemovedFlush'
 import Navbar from './components/Navbar'
 import Shop from './components/Shop'
 import Cart from './components/Cart'
+import ShopPage from './components/ShopPage'
 
 function App() {
   const [showAddedFlush, setShowAddedFlush] = useState(false);
@@ -203,6 +204,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Shop addToCart={addToCart} />} />
           <Route path="/cart" element={<Cart cart={cart} methods={methods} />} />
+          <Route path="/shop/:id" element={<ShopPage addToCart={addToCart} />} />
         </Routes>
       </div>
     </BrowserRouter>

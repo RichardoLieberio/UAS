@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 
 function ProductCard({ product, addToCart }) {
     return(
-        <div className="w-52 mx-auto hover:brightness-95">
+        <div className="w-52 hover:brightness-95">
             <div className="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700">
                 <img className="rounded-t-lg object-center mx-auto" src={product.images[1]} alt="Product Image"/>
                 <div className="p-2.5">
